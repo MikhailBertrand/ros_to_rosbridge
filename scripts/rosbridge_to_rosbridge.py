@@ -56,7 +56,7 @@ class rosbridge_to_rosbridge():
             callback = partial(self.callback, self.bridge_pub[topicname])
             self.local_sub[topicname].subscribe(callback)
 
-        if conf['include_topics'] is None:
+        if 'include_topics' not in conf.keys() or conf['include_topics'] is None:
             # if match exclude topic => flag is True
             flag = False
             for topic_dict in topics_list_dict:
