@@ -8,7 +8,6 @@ import re
 import time
 from functools import partial
 
-import rospkg
 import rospy
 import yaml
 from roslibpy import Ros
@@ -20,8 +19,7 @@ class rosbridge_to_rosbridge():
         # ROS bridge
         self.local_sub = {}
         self.bridge_pub = {}
-        rospack = rospkg.RosPack()
-        conf = yaml.safe_load(open(rospack.get_path('ros_to_rosbridge') + '/conf/config.yaml'))
+        conf = yaml.safe_load(open(rospy.get_param('~conf_path')))
         topics = rospy.get_published_topics('/')
         topics_list_dict = []
         for topic in topics:
