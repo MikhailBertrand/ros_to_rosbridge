@@ -25,13 +25,12 @@ class rosbridge_to_rosbridge():
         for topic in topics:
             topics_list_dict.append({'name': topic[0], 'type': topic[1]})
         use_id_for_ns = bool(rospy.get_param('~use_id_for_ns', "False"))
-
-        self.local_ros_client = Ros(rospy.get_param('~local_host', '127.0.0.1'), rospy.get_param('~local_port', 9090))
+        self.local_ros_client = Ros(
+            rospy.get_param('~local_host', '127.0.0.1'),
+            rospy.get_param('~local_port', 9090))
         self.bridge_ros_client = Ros(
-            rospy.get_param(
-                '~remote_host', '127.0.0.1'), rospy.get_param(
-                '~remote_port', 9090))
-
+            rospy.get_param('~remote_host', '127.0.0.1'),
+            rospy.get_param('~remote_port', 9090))
         rospy.loginfo('')
         rospy.loginfo(
             'Connect Local Host : [%s:%s], Remote Host : [%s:%s]', rospy.get_param(
@@ -40,7 +39,6 @@ class rosbridge_to_rosbridge():
                 '~remote_host', '127.0.0.1'), rospy.get_param(
                     '~remote_port', 9090))
         rospy.loginfo('')
-
         rospy.loginfo('Make below topics bridge')
 
         # set bridge subscriber & publisher
@@ -49,10 +47,8 @@ class rosbridge_to_rosbridge():
             if use_id_for_ns:
                 pub_topicname = '/' + conf['id'] + topicname
             rospy.loginfo('Local Sub:[%s] => Bridge Pub:[%s]', topicname, pub_topicname)
-
             self.local_sub[topicname] = Topic(self.local_ros_client, topicname, datatype)
             self.bridge_pub[topicname] = Topic(self.bridge_ros_client, pub_topicname, datatype)
-
             callback = partial(self.callback, self.bridge_pub[topicname])
             self.local_sub[topicname].subscribe(callback)
 
@@ -65,11 +61,10 @@ class rosbridge_to_rosbridge():
                     if flag:
                         break
                 if not flag:
-
                     set_pub_sub(topic_dict['name'], topic_dict['type'])
         else:
             for topic_conf in conf['include_topics']:
-                set_pub_sub(topic_conf['name'].decode(), topic_conf['type'].decode())
+                set_pub_sub(topic_conf['name'], topic_conf['type'])
 
         try:
             self.bridge_ros_client.run_forever()
