@@ -74,3 +74,13 @@ include_topics:
 | id | id for topicname when bridge |
 | exclude_topics | Topics for which bridges are excluded |
 | include_topics | The topic to be bridged (topic name and data type) |
+
+# For Noetic
+
+Python package `roslibpy` includes a bug.
+To avoid exceptions, a quick fix can be to edit the library file.
+In file `~/.local/lib/python3.8/site-packages/roslibpy/ros.py` (path may differ depending on your environment), add the following line after the `import logging` line.
+
+```python
+logging._srcfile = None
+```
